@@ -18,10 +18,12 @@ use std::sync::Arc;
 use crate::tools::handlers::parse_arguments;
 
 mod exec_command;
+mod monitor;
 mod write_stdin;
 
 pub use exec_command::ExecCommandHandler;
 pub(crate) use exec_command::ExecCommandHandlerOptions;
+pub use monitor::MonitorHandler;
 pub use write_stdin::WriteStdinHandler;
 
 #[derive(Debug, Deserialize)]
@@ -45,6 +47,26 @@ pub(crate) struct ExecCommandArgs {
     justification: Option<String>,
     #[serde(default)]
     prefix_rule: Option<Vec<String>>,
+}
+
+impl ExecCommandArgs {
+    /// Args for running `cmd` with the session's default shell and no permission
+    /// escalation. Used by the monitor tool, which only needs the resolved
+    /// command and shell type from [`get_command`].
+    pub(crate) fn for_command(cmd: String) -> Self {
+        Self {
+            cmd,
+            shell: None,
+            login: None,
+            tty: false,
+            yield_time_ms: 0,
+            max_output_tokens: None,
+            sandbox_permissions: SandboxPermissions::default(),
+            additional_permissions: None,
+            justification: None,
+            prefix_rule: None,
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]

@@ -217,6 +217,9 @@ pub enum Feature {
     CurrentTimeReminder,
     /// Expose an input-interruptible sleep tool.
     SleepTool,
+    /// Expose a command-monitor tool: run a shell command in the background and
+    /// deliver each stdout line to the model as a notification.
+    Monitor,
     /// Route MCP tool approval prompts through the MCP elicitation request path.
     ToolCallMcpElicitation,
     /// Prompt Codex Apps connector auth failures through MCP URL elicitations.
@@ -1238,6 +1241,12 @@ pub const FEATURES: &[FeatureSpec] = &[
     FeatureSpec {
         id: Feature::SleepTool,
         key: "sleep_tool",
+        stage: Stage::UnderDevelopment,
+        default_enabled: false,
+    },
+    FeatureSpec {
+        id: Feature::Monitor,
+        key: "monitor",
         stage: Stage::UnderDevelopment,
         default_enabled: false,
     },
